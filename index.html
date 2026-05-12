@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoCam — Marché Automobile du Cameroun</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --green:#1B4332;--gmid:#2D6A4F;--glt:#40916C;--gpale:#E8F5E9;
+  --yel:#E9C46A;--ydk:#C9932A;--red:#C1121F;
+  --bg:#FAFAFA;--dark:#0D1B2A;--gray:#6B7280;--grl:#9CA3AF;--bdr:#E5E7EB;
+  --sh:0 2px 20px rgba(27,67,50,.08);--shh:0 12px 40px rgba(27,67,50,.16);
+  --nh:64px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Cormorant Garamond',serif}
+img{display:block;max-width:100%;object-fit:cover}
+button{cursor:pointer;font-family:'DM Sans',sans-serif}
+a{text-decoration:none;color:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding:0 1.25rem}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s ease}
+.reveal.in{opacity:1;transform:none}
+@keyframes up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+
+/* ── NAV ── */
+nav{position:fixed;inset:0 0 auto;z-index:300;transition:.3s}
+nav.lit{background:rgba(255,255,255,.97);backdrop-filter:blur(18px);box-shadow:0 1px 0 var(--bdr)}
+.nav-row{max-width:1200px;margin:0 auto;padding:0 1.25rem;height:var(--nh);display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.logo{display:flex;align-items:center;gap:9px;cursor:pointer;user-select:none}
+.logo-box{width:34px;height:34px;background:var(--yel);border-radius:8px;display:grid;place-items:center;flex-shrink:0}
+.logo-txt{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;letter-spacing:-.5px;color:#fff;line-height:1}
+.logo-txt b{color:var(--yel)}
+nav.lit .logo-txt{color:var(--green)}
+nav.lit .logo-txt b{color:var(--ydk)}
+.nav-links{display:flex;gap:1.6rem;list-style:none}
+.nav-links a{font-size:14px;color:rgba(255,255,255,.75);transition:.2s}
+nav.lit .nav-links a{color:var(--dark);opacity:.7}
+.nav-links a:hover{color:var(--yel)!important;opacity:1!important}
+
+/* lang toggle pill */
+.lang-toggle{display:flex;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:30px;padding:3px;gap:2px;transition:.3s}
+nav.lit .lang-toggle{background:rgba(27,67,50,.06);border-color:var(--bdr)}
+.lang-opt{background:none;border:none;border-radius:24px;padding:5px 13px;font-size:12px;font-weight:500;color:rgba(255,255,255,.65);transition:all .22s;white-space:nowrap}
+nav.lit .lang-opt{color:var(--gray)}
+.lang-opt.active{background:#fff;color:var(--green);box-shadow:0 1px 6px rgba(0,0,0,.12)}
+nav.lit .lang-opt.active{background:var(--green);color:#fff}
+
+.burger{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:3px}
+.burger span{width:22px;height:2px;border-radius:2px;background:#fff;display:block;transition:.3s}
+nav.lit .burger span{background:var(--dark)}
+.drw{display:none;position:fixed;inset:0;z-index:299;background:rgba(0,0,0,.48);backdrop-filter:blur(4px)}
+.drw.on{display:block}
+.drw-panel{position:absolute;top:0;right:0;width:min(290px,84vw);height:100%;background:#fff;padding:4.5rem 1.5rem 2rem;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s ease;box-shadow:-6px 0 28px rgba(0,0,0,.12)}
+.drw.on .drw-panel{transform:none}
+.drw-panel a{font-size:16px;color:var(--dark);padding:13px 0;border-bottom:1px solid var(--bdr);display:block}
+.drw-lang{display:flex;gap:8px;margin-top:1.25rem}
+.drw-lang button{flex:1;padding:10px;border-radius:8px;font-size:13px;font-weight:500;border:1.5px solid var(--bdr);background:#fff;color:var(--dark);transition:.2s}
+.drw-lang button.active{background:var(--green);color:#fff;border-color:var(--green)}
+.drw-close{position:absolute;top:.9rem;right:.9rem;background:none;border:1px solid var(--bdr);border-radius:50%;width:32px;height:32px;display:grid;place-items:center}
+
+/* ── PAGES ── */
+.pg{display:none}.pg.on{display:block}
+
+/* ── HERO ── */
+.hero{min-height:100vh;background:linear-gradient(150deg,#1B4332,#061410);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:calc(var(--nh)+3rem) 1.25rem 4rem;text-align:center}
+.hero-dots{position:absolute;inset:0;opacity:.05;background-image:repeating-linear-gradient(45deg,#E9C46A 0,#E9C46A 1px,transparent 0,transparent 50%);background-size:22px 22px;pointer-events:none}
+.hero-glow{position:absolute;width:650px;height:650px;background:radial-gradient(circle,rgba(233,196,106,.12),transparent 68%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.hero-inner{position:relative;max-width:800px;width:100%;animation:up .85s ease both}
+.pill{display:inline-flex;align-items:center;gap:6px;background:rgba(233,196,106,.15);border:1px solid rgba(233,196,106,.3);border-radius:20px;padding:5px 15px;font-size:12px;color:var(--yel);margin-bottom:1.4rem;letter-spacing:.06em}
+.hero h1{font-size:clamp(2.5rem,6.5vw,5rem);color:#fff;line-height:1.07;margin-bottom:.9rem;font-weight:600}
+.hero h1 em{color:var(--yel);font-style:italic}
+.hero-sub{font-size:15px;color:rgba(255,255,255,.56);line-height:1.8;max-width:500px;margin:0 auto 2.25rem}
+.sbox{background:#fff;border-radius:15px;padding:7px;display:flex;flex-wrap:nowrap;gap:5px;max-width:700px;width:100%;margin:0 auto 2rem;box-shadow:0 18px 56px rgba(0,0,0,.32)}
+.sfield{flex:1;display:flex;flex-direction:column;padding:8px 13px;border-right:1px solid var(--bdr);min-width:0}
+.sfield:last-of-type{border-right:none}
+.sfield label{font-size:10px;font-weight:500;color:var(--grl);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px;white-space:nowrap}
+.sfield select,.sfield input{border:none;outline:none;font-size:13.5px;font-family:'DM Sans',sans-serif;color:var(--dark);background:transparent;width:100%}
+.sbtn{flex-shrink:0;background:var(--green);color:#fff;border:none;border-radius:10px;padding:0 20px;font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:7px;transition:.2s;white-space:nowrap}
+.sbtn:hover{background:var(--gmid)}
+.stats{display:flex;gap:1.75rem;justify-content:center;align-items:center;flex-wrap:wrap}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--yel);display:block;line-height:1}
+.stat-lbl{font-size:11px;color:rgba(255,255,255,.4);margin-top:2px;display:block}
+.sdiv{width:1px;height:34px;background:rgba(255,255,255,.12);flex-shrink:0}
+
+/* ── SECTIONS ── */
+.s-lbl{font-size:11px;font-weight:500;letter-spacing:.13em;text-transform:uppercase;color:var(--glt);display:block;margin-bottom:.3rem}
+.s-title{font-size:clamp(1.8rem,3.8vw,2.75rem);font-weight:600;color:var(--dark);line-height:1.12;margin-bottom:.7rem}
+.s-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:1.75rem;flex-wrap:wrap;gap:.75rem}
+
+/* ── LISTINGS ── */
+.lst{padding:72px 0}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:1.75rem}
+.chip{padding:6px 15px;border:1px solid var(--bdr);border-radius:20px;font-size:13px;background:#fff;color:var(--dark);transition:.2s}
+.chip:hover,.chip.on{background:var(--green);color:#fff;border-color:var(--green)}
+.cgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.ccard{background:#fff;border:1px solid var(--bdr);border-radius:16px;overflow:hidden;transition:all .26s;cursor:pointer}
+.ccard:hover{transform:translateY(-6px);box-shadow:var(--shh);border-color:transparent}
+.cimg{position:relative;height:205px;overflow:hidden;background:linear-gradient(135deg,#dceede,#c3d9c8)}
+.cimg img{width:100%;height:100%;transition:transform .42s ease}
+.ccard:hover .cimg img{transform:scale(1.06)}
+.cbadge{position:absolute;top:10px;left:10px;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:500}
+.bn{background:var(--green);color:#fff}.bv{background:var(--yel);color:#7a5200}.bp{background:var(--red);color:#fff}
+.cbody{padding:14px 16px 12px}
+.cmake{font-size:11px;color:var(--grl);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px}
+.cname{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--dark);line-height:1.15;margin-bottom:5px}
+.cprice{font-size:16px;font-weight:500;color:var(--green);margin-bottom:9px}
+.cspecs{display:flex;gap:9px;flex-wrap:wrap}
+.cspec{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--gray)}
+.cfoot{padding:10px 16px;border-top:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ccity{font-size:12px;color:var(--gray);display:flex;align-items:center;gap:4px}
+.btn-see{background:var(--green);color:#fff;border:none;border-radius:7px;padding:7px 13px;font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px;transition:.2s;white-space:nowrap}
+.btn-see:hover{background:var(--gmid)}
+
+/* ── MAKES ── */
+.mks{padding:64px 0;background:#F4F7F4}
+.mkgrid{display:grid;grid-template-columns:repeat(8,1fr);gap:12px}
+.mkcard{background:#fff;border:1px solid var(--bdr);border-radius:13px;padding:16px 10px;text-align:center;transition:all .22s;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
+.mkcard:hover{border-color:var(--green);box-shadow:var(--sh);transform:translateY(-3px)}
+.mklogo{width:48px;height:48px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px}
+.mkname{font-size:13px;font-weight:500;color:var(--dark)}
+.mkcnt{font-size:11px;color:var(--grl)}
+
+/* ── HOW ── */
+.how{padding:72px 0;background:#fff}
+.howgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.howcard{position:relative;padding:1.75rem 1.4rem;background:#fff;border:1px solid var(--bdr);border-radius:16px;text-align:center;transition:.26s;overflow:hidden}
+.howcard:hover{transform:translateY(-4px);box-shadow:var(--shh)}
+.hownum{font-family:'Cormorant Garamond',serif;font-size:5rem;font-weight:700;color:var(--green);opacity:.06;position:absolute;top:4px;right:14px;line-height:1;pointer-events:none}
+.howico{width:52px;height:52px;background:var(--gpale);border-radius:13px;display:grid;place-items:center;margin:0 auto .9rem}
+.howt{font-size:15px;font-weight:500;color:var(--dark);margin-bottom:.38rem}
+.howp{font-size:13px;color:var(--gray);line-height:1.65}
+
+/* ── TESTIMONIALS ── */
+.testi{padding:72px 0;background:linear-gradient(150deg,#1B4332,#061410);position:relative;overflow:hidden}
+.testi::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(233,196,106,.032) 0,rgba(233,196,106,.032) 1px,transparent 0,transparent 50%);background-size:22px 22px;pointer-events:none}
+.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.tcard{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:26px;transition:.26s}
+.tcard:hover{background:rgba(255,255,255,.1);transform:translateY(-3px)}
+.tstars{font-size:15px;color:var(--yel);margin-bottom:.9rem;letter-spacing:2px}
+.ttxt{font-size:14px;color:rgba(255,255,255,.76);line-height:1.82;margin-bottom:1.2rem;font-style:italic}
+.tper{display:flex;align-items:center;gap:10px}
+.tavt{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:600;font-size:14px;flex-shrink:0}
+.tname{font-size:14px;font-weight:500;color:#fff}
+.tcity{font-size:12px;color:rgba(255,255,255,.35);margin-top:1px}
+
+/* ── CONTACT ── */
+.ctsec{padding:72px 0;background:#fff}
+.ctbox{max-width:580px;margin:0 auto;text-align:center}
+.ctbox>p{color:var(--gray);font-size:15px;line-height:1.75;margin-bottom:1.75rem}
+.ctform{display:flex;flex-direction:column;gap:11px;text-align:left}
+.ff{display:flex;flex-direction:column;gap:4px}
+.ff label{font-size:11px;font-weight:500;color:var(--gray);text-transform:uppercase;letter-spacing:.05em}
+.ff input,.ff textarea{border:1.5px solid var(--bdr);border-radius:9px;padding:11px 13px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--dark);outline:none;transition:.2s;resize:none}
+.ff input:focus,.ff textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(27,67,50,.07)}
+.btn-sub{background:var(--green);color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:500;width:100%;margin-top:4px;transition:.2s}
+.btn-sub:hover{background:var(--gmid)}
+
+/* ── FOOTER ── */
+footer{background:var(--dark);padding:52px 0 24px}
+.fgrid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:2.5rem;margin-bottom:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid rgba(255,255,255,.08)}
+.fbrand p{font-size:13px;color:rgba(255,255,255,.36);line-height:1.8;margin-top:.7rem;max-width:240px}
+.fcol h4{font-size:12px;font-weight:500;color:rgba(255,255,255,.78);margin-bottom:.9rem;text-transform:uppercase;letter-spacing:.08em}
+.fcol ul{list-style:none}
+.fcol li{margin-bottom:.55rem}
+.fcol a{font-size:13px;color:rgba(255,255,255,.34);transition:.2s}
+.fcol a:hover{color:var(--yel)}
+.fbot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
+.fbot p{font-size:12px;color:rgba(255,255,255,.18)}
+
+/* ── MOBILE TAB BAR ── */
+.tabbar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:#fff;border-top:1px solid var(--bdr);padding:7px 0 max(7px,env(safe-area-inset-bottom))}
+.tbinner{display:flex;justify-content:space-around;max-width:480px;margin:0 auto}
+.tbi{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;color:var(--grl);font-size:10px;padding:0 7px;transition:.2s}
+.tbi svg{width:22px;height:22px}
+.tbi.on{color:var(--green)}
+
+/* ── DETAIL PAGE ── */
+.det{padding-top:var(--nh)}
+.det-head{background:var(--dark)}
+.crumb{display:flex;align-items:center;gap:7px;padding:1.25rem 0 1rem;font-size:13px;color:rgba(255,255,255,.4)}
+.crumb button{background:none;border:none;color:rgba(255,255,255,.4);font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;gap:5px;transition:.2s}
+.crumb button:hover{color:var(--yel)}
+.crumb span{color:rgba(255,255,255,.18)}
+.gallery{display:grid;grid-template-columns:3fr 2fr;grid-template-rows:1fr 1fr;gap:6px;height:440px;border-radius:14px;overflow:hidden}
+.gmain{grid-row:1/span 2;overflow:hidden;cursor:pointer}
+.gmain img,.gthumb img{width:100%;height:100%;transition:transform .38s ease;object-fit:cover}
+.gmain:hover img,.gthumb:hover img{transform:scale(1.04)}
+.gthumb{overflow:hidden;cursor:pointer;position:relative;background:#1a2e24}
+.gmore{position:absolute;inset:0;background:rgba(6,20,14,.62);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:500}
+.det-body{padding:2.5rem 0 4.5rem}
+.det-grid{display:grid;grid-template-columns:1fr 370px;gap:2.5rem;align-items:start}
+.dmake{font-size:12px;color:var(--grl);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem}
+.dname{font-size:clamp(1.9rem,4.5vw,2.9rem);font-weight:600;color:var(--dark);line-height:1.08;margin-bottom:.45rem}
+.dprice{font-size:1.85rem;font-weight:500;color:var(--green);margin-bottom:.65rem}
+.dbadges{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:2rem}
+.dbadge{padding:5px 12px;border-radius:6px;font-size:12px;font-weight:500}
+.stitle{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:var(--dark);margin-bottom:1.1rem}
+.spgrid{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--bdr);border-radius:13px;overflow:hidden;margin-bottom:2.25rem}
+.sprow{background:#fff;padding:13px 17px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--bdr)}
+.sprow:nth-child(even){background:#FAFCFA}
+.sprow:nth-last-child(-n+2){border-bottom:none}
+.spkey{font-size:13px;color:var(--gray);display:flex;align-items:center;gap:7px}
+.spval{font-size:13px;font-weight:500;color:var(--dark);text-align:right}
+.desc{font-size:14px;color:var(--gray);line-height:1.88;margin-bottom:2.25rem}
+.simgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.ctcard{background:#fff;border:1px solid var(--bdr);border-radius:18px;overflow:hidden;box-shadow:var(--sh);position:sticky;top:calc(var(--nh)+1.25rem)}
+.cth{background:linear-gradient(135deg,var(--green),#071810);padding:1.4rem;position:relative;overflow:hidden}
+.cth::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(233,196,106,.05) 0,rgba(233,196,106,.05) 1px,transparent 0,transparent 50%);background-size:18px 18px}
+.ctplbl{font-size:11px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.06em;position:relative}
+.ctprice{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--yel);position:relative;line-height:1.1}
+.ctbody{padding:1.4rem}
+.selrow{display:flex;align-items:center;gap:11px;margin-bottom:1.4rem;padding-bottom:1.4rem;border-bottom:1px solid var(--bdr)}
+.selavt{width:44px;height:44px;background:var(--gpale);border-radius:50%;display:grid;place-items:center;font-weight:600;font-size:16px;color:var(--green);flex-shrink:0}
+.selname{font-size:14px;font-weight:500;color:var(--dark)}
+.selvfy{font-size:12px;color:var(--glt);display:flex;align-items:center;gap:4px;margin-top:2px}
+.ctf{display:flex;flex-direction:column;gap:9px;margin-bottom:10px}
+.ctf .ff input,.ctf .ff textarea{font-size:13px}
+.btn-wa{width:100%;background:#25D366;color:#fff;border:none;border-radius:9px;padding:12px;font-size:13.5px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:8px;transition:.2s;margin-bottom:7px}
+.btn-wa:hover{background:#1db954}
+.btn-call{width:100%;background:var(--gpale);color:var(--green);border:1.5px solid #b6d8be;border-radius:9px;padding:11px;font-size:13.5px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:8px;transition:.2s}
+.btn-call:hover{background:#d1ecda}
+
+/* ── LIGHTBOX ── */
+.lb{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.93);align-items:center;justify-content:center}
+.lb.on{display:flex}
+.lb img{max-width:90vw;max-height:85vh;border-radius:8px;object-fit:contain}
+.lb-x{position:absolute;top:.9rem;right:1.1rem;background:none;border:none;color:#fff;font-size:32px;line-height:1;cursor:pointer}
+.lbn,.lbp{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.12);border:none;color:#fff;border-radius:50%;width:42px;height:42px;display:grid;place-items:center;cursor:pointer;transition:.2s}
+.lbp{left:.9rem}.lbn{right:.9rem}
+.lbn:hover,.lbp:hover{background:rgba(255,255,255,.24)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1080px){
+  .cgrid{grid-template-columns:repeat(2,1fr)}
+  .mkgrid{grid-template-columns:repeat(4,1fr)}
+  .det-grid{grid-template-columns:1fr 330px;gap:2rem}
+  .simgrid{grid-template-columns:repeat(2,1fr)}
+  .fgrid{grid-template-columns:1fr 1fr;gap:2rem}
+  .fbrand{grid-column:1/-1}
+}
+@media(max-width:760px){
+  :root{--nh:58px}
+  .nav-links{display:none}
+  .burger{display:flex}
+  .hero{padding:calc(var(--nh)+1.75rem) 1.1rem 3rem}
+  .sbox{flex-direction:column;padding:9px;gap:0;border-radius:13px}
+  .sfield{border-right:none;border-bottom:1px solid var(--bdr);padding:9px 12px}
+  .sfield:last-of-type{border-bottom:none}
+  .sbtn{width:100%;justify-content:center;padding:12px;margin-top:5px;border-radius:9px}
+  .sdiv{display:none}
+  .lst,.mks,.how,.testi,.ctsec{padding:52px 0}
+  .cgrid{grid-template-columns:repeat(2,1fr);gap:14px}
+  .cimg{height:175px}
+  .mkgrid{grid-template-columns:repeat(4,1fr);gap:9px}
+  .howgrid{grid-template-columns:1fr 1fr;gap:16px}
+  .tgrid{grid-template-columns:1fr}
+  .fgrid{grid-template-columns:1fr 1fr;gap:1.5rem}
+  .fbrand{grid-column:1/-1}
+  .det-grid{grid-template-columns:1fr}
+  .ctcard{position:static;border-radius:14px}
+  .gallery{height:auto;grid-template-columns:1fr;grid-template-rows:260px 120px 120px}
+  .gmain{grid-row:auto}
+  .simgrid{grid-template-columns:repeat(2,1fr);gap:12px}
+  .spgrid{grid-template-columns:1fr}
+  .sprow:nth-last-child(-n+2){border-bottom:1px solid var(--bdr)}
+  .sprow:last-child{border-bottom:none}
+  .tabbar{display:block}
+  body{padding-bottom:64px}
+}
+@media(max-width:480px){
+  .cgrid{grid-template-columns:1fr}
+  .cimg{height:210px}
+  .mkgrid{grid-template-columns:repeat(4,1fr);gap:7px}
+  .mklogo{width:40px;height:40px;font-size:13px}
+  .mkcnt{display:none}
+  .howgrid{grid-template-columns:1fr}
+  .fgrid{grid-template-columns:1fr}
+  .simgrid{grid-template-columns:1fr}
+  .gallery{grid-template-rows:230px 100px;grid-template-columns:1fr 1fr}
+  .gmain{grid-column:1/-1;grid-row:auto}
+  .lang-opt{padding:5px 9px;font-size:11px}
+}
+@media(max-width:360px){
+  .mkgrid{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav id="nav">
+  <div class="nav-row">
+    <div class="logo" onclick="goHome()">
+      <div class="logo-box">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#1B4332" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/>
+          <rect x="9" y="11" width="14" height="10" rx="2"/>
+          <circle cx="12" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+        </svg>
+      </div>
+      <span class="logo-txt">Auto<b>Cam</b></span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#" onclick="goHome();return false" data-i18n="nav.home">Accueil</a></li>
+      <li><a href="#" onclick="goHome();sTo('listings');return false" data-i18n="nav.catalogue">Catalogue</a></li>
+      <li><a href="#" onclick="goHome();sTo('makes');return false" data-i18n="nav.makes">Marques</a></li>
+      <li><a href="#" onclick="goHome();sTo('ctsec');return false" data-i18n="nav.contact">Contact</a></li>
+    </ul>
+    <div style="display:flex;align-items:center;gap:9px">
+      <!-- Language toggle pill -->
+      <div class="lang-toggle" id="langToggle">
+        <button class="lang-opt active" id="btnFR" onclick="setLang('fr')">🇫🇷 FR</button>
+        <button class="lang-opt" id="btnEN" onclick="setLang('en')">🇬🇧 EN</button>
+      </div>
+      <button class="burger" id="burgerBtn"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Drawer -->
+<div class="drw" id="drw">
+  <div class="drw-panel">
+    <button class="drw-close" id="drwClose">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <a href="#" onclick="goHome();closeDrw();return false" data-i18n="nav.home">Accueil</a>
+    <a href="#" onclick="goHome();sTo('listings');closeDrw();return false" data-i18n="nav.catalogue">Catalogue</a>
+    <a href="#" onclick="goHome();sTo('makes');closeDrw();return false" data-i18n="nav.makes">Marques</a>
+    <a href="#" onclick="goHome();sTo('ctsec');closeDrw();return false" data-i18n="nav.contact">Contact</a>
+    <div class="drw-lang">
+      <button id="drwFR" class="active" onclick="setLang('fr');closeDrw()">🇫🇷 Français</button>
+      <button id="drwEN" onclick="setLang('en');closeDrw()">🇬🇧 English</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HOME ══ -->
+<div class="pg on" id="pgHome">
+
+  <section class="hero">
+    <div class="hero-dots"></div><div class="hero-glow"></div>
+    <div class="hero-inner">
+      <div class="pill">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span data-i18n="hero.pill">Plateforme N°1 au Cameroun</span>
+      </div>
+      <h1 data-i18n="hero.h1">Trouvez la voiture<br><em>idéale</em> au Cameroun</h1>
+      <p class="hero-sub" data-i18n="hero.sub">Des véhicules sélectionnés et vérifiés à Yaoundé, Douala et dans toutes les régions du pays.</p>
+      <div class="sbox">
+        <div class="sfield">
+          <label data-i18n="search.make">Marque</label>
+          <select id="sMake">
+            <option value="" data-i18n="search.allMakes">Toutes les marques</option>
+            <option>Toyota</option><option>Mercedes-Benz</option><option>Honda</option>
+            <option>Mitsubishi</option><option>Peugeot</option><option>Hyundai</option>
+            <option>Kia</option><option>Nissan</option>
+          </select>
+        </div>
+        <div class="sfield">
+          <label data-i18n="search.city">Ville</label>
+          <select id="sCity">
+            <option value="" data-i18n="search.allCities">Toutes les villes</option>
+            <option>Yaoundé</option><option>Douala</option><option>Bafoussam</option>
+            <option>Garoua</option><option>Bamenda</option><option>Maroua</option>
+            <option>Buea</option><option>Kribi</option>
+          </select>
+        </div>
+        <div class="sfield">
+          <label data-i18n="search.budget">Budget max (XAF)</label>
+          <input id="sBudget" type="text" data-i18n-ph="search.budgetPh" placeholder="Ex: 15 000 000">
+        </div>
+        <button class="sbtn" onclick="doSearch()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <span data-i18n="search.btn">Rechercher</span>
+        </button>
+      </div>
+      <div class="stats">
+        <div class="stat"><span class="stat-num">4 800+</span><span class="stat-lbl" data-i18n="stats.listings">Annonces actives</span></div>
+        <div class="sdiv"></div>
+        <div class="stat"><span class="stat-num">320+</span><span class="stat-lbl" data-i18n="stats.verified">Véhicules vérifiés</span></div>
+        <div class="sdiv"></div>
+        <div class="stat"><span class="stat-num">10</span><span class="stat-lbl" data-i18n="stats.regions">Régions couvertes</span></div>
+        <div class="sdiv"></div>
+        <div class="stat"><span class="stat-num">12k+</span><span class="stat-lbl" data-i18n="stats.visitors">Visiteurs / mois</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LISTINGS -->
+  <section class="lst" id="listings">
+    <div class="wrap">
+      <div class="s-head"><div>
+        <span class="s-lbl" data-i18n="listings.lbl">Nos véhicules</span>
+        <h2 class="s-title" data-i18n="listings.title">Catalogue AutoCam</h2>
+      </div></div>
+      <div class="chips">
+        <button class="chip on" onclick="filterCars(this,'all')" data-i18n="filter.all">Tous</button>
+        <button class="chip" onclick="filterCars(this,'berline')" data-i18n="filter.sedan">Berlines</button>
+        <button class="chip" onclick="filterCars(this,'suv')" data-i18n="filter.suv">SUV / 4x4</button>
+        <button class="chip" onclick="filterCars(this,'luxe')" data-i18n="filter.luxury">Luxe</button>
+        <button class="chip" onclick="filterCars(this,'utilitaire')" data-i18n="filter.van">Utilitaires</button>
+      </div>
+      <div class="cgrid" id="carsGrid"></div>
+    </div>
+  </section>
+
+  <!-- MAKES -->
+  <section class="mks" id="makes">
+    <div class="wrap">
+      <div style="text-align:center;margin-bottom:2rem">
+        <span class="s-lbl" style="display:flex;justify-content:center" data-i18n="makes.lbl">Marques populaires</span>
+        <h2 class="s-title" style="text-align:center" data-i18n="makes.title">Cherchez par marque</h2>
+      </div>
+      <div class="mkgrid" id="makesGrid"></div>
+    </div>
+  </section>
+
+  <!-- HOW -->
+  <section class="how">
+    <div class="wrap">
+      <div style="text-align:center;margin-bottom:2.5rem">
+        <span class="s-lbl" style="display:flex;justify-content:center" data-i18n="how.lbl">Comment ça marche</span>
+        <h2 class="s-title" style="text-align:center" data-i18n="how.title">Trouver votre voiture en 3 étapes</h2>
+        <p style="color:var(--gray);font-size:15px;max-width:460px;margin:.5rem auto 0;line-height:1.75" data-i18n="how.sub">Chaque annonce est ajoutée et vérifiée directement par l'équipe AutoCam.</p>
+      </div>
+      <div class="howgrid">
+        <div class="howcard">
+          <span class="hownum">01</span>
+          <div class="howico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B4332" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+          <h3 class="howt" data-i18n="how.s1t">Parcourez le catalogue</h3>
+          <p class="howp" data-i18n="how.s1p">Filtrez par marque, ville et budget. Consultez les fiches détaillées de chaque véhicule.</p>
+        </div>
+        <div class="howcard">
+          <span class="hownum">02</span>
+          <div class="howico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B4332" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+          <h3 class="howt" data-i18n="how.s2t">Consultez les détails</h3>
+          <p class="howp" data-i18n="how.s2p">Photos complètes, caractéristiques techniques et coordonnées du vendeur.</p>
+        </div>
+        <div class="howcard">
+          <span class="hownum">03</span>
+          <div class="howico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B4332" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12 19.79 19.79 0 0 1 1.08 3.4 2 2 0 0 1 3.05 1.2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.09 9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 21 16.92z"/></svg></div>
+          <h3 class="howt" data-i18n="how.s3t">Contactez le vendeur</h3>
+          <p class="howp" data-i18n="how.s3p">Appelez ou envoyez un message WhatsApp directement depuis la fiche du véhicule.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testi">
+    <div class="wrap" style="position:relative;z-index:1">
+      <div style="text-align:center;margin-bottom:2.5rem">
+        <span class="s-lbl" style="color:rgba(233,196,106,.6);display:flex;justify-content:center" data-i18n="testi.lbl">Témoignages</span>
+        <h2 class="s-title" style="color:#fff;text-align:center" data-i18n="testi.title">Ce que disent nos clients</h2>
+      </div>
+      <div class="tgrid">
+        <div class="tcard">
+          <div class="tstars">★★★★★</div>
+          <p class="ttxt" data-i18n="testi.t1">"J'ai trouvé mon Land Cruiser en 2 jours grâce à AutoCam. Les photos et informations étaient exactement conformes à la réalité."</p>
+          <div class="tper"><div class="tavt" style="background:var(--yel);color:#7a5200">JN</div><div><p class="tname">Jean-Paul Nguessa</p><p class="tcity">📍 Yaoundé</p></div></div>
+        </div>
+        <div class="tcard">
+          <div class="tstars">★★★★★</div>
+          <p class="ttxt" data-i18n="testi.t2">"Interface claire, fiches complètes. J'ai trouvé ma Corolla à Douala sans mauvaise surprise. Je recommande AutoCam à 100% !"</p>
+          <div class="tper"><div class="tavt" style="background:var(--gpale);color:var(--green)">AM</div><div><p class="tname">Aïcha Mbida</p><p class="tcity">📍 Douala</p></div></div>
+        </div>
+        <div class="tcard">
+          <div class="tstars">★★★★☆</div>
+          <p class="ttxt" data-i18n="testi.t3">"Les photos sont nombreuses et de qualité. On voit vraiment l'état du véhicule avant même de se déplacer. Très bon service."</p>
+          <div class="tper"><div class="tavt" style="background:rgba(233,196,106,.18);color:var(--yel)">EF</div><div><p class="tname">Emmanuel Fokam</p><p class="tcity">📍 Bafoussam</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="ctsec" id="ctsec">
+    <div class="wrap"><div class="ctbox">
+      <span class="s-lbl" style="display:flex;justify-content:center" data-i18n="contact.lbl">Nous contacter</span>
+      <h2 class="s-title" style="text-align:center" data-i18n="contact.title">Une question ? Écrivez-nous</h2>
+      <p data-i18n="contact.sub">Vous souhaitez plus d'informations sur un véhicule ? Notre équipe vous répond rapidement.</p>
+      <div class="ctform">
+        <div class="ff"><label data-i18n="contact.name">Votre nom</label><input type="text" data-i18n-ph="contact.namePh" placeholder="Ex: Patrice Mbala"></div>
+        <div class="ff"><label data-i18n="contact.phone">Téléphone ou Email</label><input type="text" placeholder="+237 6XX XXX XXX"></div>
+        <div class="ff"><label data-i18n="contact.msg">Message</label><textarea rows="4" data-i18n-ph="contact.msgPh" placeholder="Votre message..."></textarea></div>
+        <button class="btn-sub" data-i18n="contact.send">Envoyer le message</button>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <div class="fgrid">
+        <div class="fbrand">
+          <div class="logo" onclick="goHome()">
+            <div class="logo-box"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#1B4332" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/><rect x="9" y="11" width="14" height="10" rx="2"/><circle cx="12" cy="21" r="1"/><circle cx="20" cy="21" r="1"/></svg></div>
+            <span class="logo-txt" style="color:#fff">Auto<b style="color:var(--ydk)">Cam</b></span>
+          </div>
+          <p data-i18n="footer.brand">Le premier marché automobile de confiance au Cameroun. Tous les véhicules sont vérifiés par notre équipe.</p>
+          <p style="font-size:13px;color:rgba(255,255,255,.28);margin-top:.6rem">🇨🇲 Cameroun · XAF · +237</p>
+        </div>
+        <div class="fcol">
+          <h4 data-i18n="footer.catalogueTitle">Catalogue</h4>
+          <ul>
+            <li><a href="#" onclick="goHome();return false" data-i18n="footer.allCars">Tous les véhicules</a></li>
+            <li><a href="#" data-i18n="filter.suv">SUV / 4x4</a></li>
+            <li><a href="#" data-i18n="filter.sedan">Berlines</a></li>
+            <li><a href="#" data-i18n="filter.luxury">Luxe</a></li>
+          </ul>
+        </div>
+        <div class="fcol">
+          <h4>AutoCam</h4>
+          <ul>
+            <li><a href="#" data-i18n="footer.about">À propos</a></li>
+            <li><a href="#" onclick="goHome();sTo('ctsec');return false" data-i18n="nav.contact">Contact</a></li>
+            <li><a href="#" data-i18n="footer.legal">Mentions légales</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="fbot">
+        <p data-i18n="footer.copy">© 2025 AutoCam · Tous droits réservés 🇨🇲</p>
+        <p>Yaoundé · Douala · Bafoussam · Garoua · Bamenda</p>
+      </div>
+    </div>
+  </footer>
+</div><!-- /pgHome -->
+
+<!-- ══ DETAIL PAGE ══ -->
+<div class="pg" id="pgDetail">
+  <div class="det">
+    <div class="det-head">
+      <div class="wrap">
+        <div class="crumb">
+          <button onclick="goHome()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            <span data-i18n="detail.back">Retour au catalogue</span>
+          </button>
+          <span>/</span><span id="crumbName"></span>
+        </div>
+        <div class="gallery" id="gallery"></div>
+      </div>
+    </div>
+    <div class="det-body"><div class="wrap">
+      <div class="det-grid">
+        <div>
+          <p class="dmake" id="dMake"></p>
+          <h1 class="dname" id="dName"></h1>
+          <p class="dprice" id="dPrice"></p>
+          <div class="dbadges" id="dBadges"></div>
+          <h3 class="stitle" data-i18n="detail.specs">Caractéristiques</h3>
+          <div class="spgrid" id="spGrid"></div>
+          <h3 class="stitle" data-i18n="detail.desc">Description</h3>
+          <p class="desc" id="dDesc"></p>
+          <h3 class="stitle" data-i18n="detail.similar">Véhicules similaires</h3>
+          <div class="simgrid" id="simGrid"></div>
+        </div>
+        <div>
+          <div class="ctcard">
+            <div class="cth">
+              <p class="ctplbl" data-i18n="detail.salePrice">Prix de vente</p>
+              <p class="ctprice" id="ctPrice"></p>
+            </div>
+            <div class="ctbody">
+              <div class="selrow">
+                <div class="selavt" id="selAvt"></div>
+                <div>
+                  <p class="selname" id="selName"></p>
+                  <p class="selvfy">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span data-i18n="detail.verified">Vendeur vérifié AutoCam</span>
+                  </p>
+                </div>
+              </div>
+              <div class="ctf">
+                <div class="ff"><label data-i18n="contact.name">Votre nom</label><input type="text" data-i18n-ph="contact.namePh" placeholder="Ex: Paul Biya"></div>
+                <div class="ff"><label data-i18n="contact.phone">Téléphone</label><input type="tel" placeholder="+237 6XX XXX XXX"></div>
+                <div class="ff"><label data-i18n="contact.msg">Message</label><textarea rows="3" data-i18n-ph="detail.msgPh" placeholder="Je suis intéressé(e) par ce véhicule..."></textarea></div>
+              </div>
+              <button class="btn-wa" id="waBtn">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+                <span data-i18n="detail.whatsapp">Contacter sur WhatsApp</span>
+              </button>
+              <button class="btn-call" id="callBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12 19.79 19.79 0 0 1 1.08 3.4 2 2 0 0 1 3.05 1.2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.09 9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 21 16.92z"/></svg>
+                <span data-i18n="detail.call">Appeler le vendeur</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</div><!-- /pgDetail -->
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb">
+  <button class="lb-x" onclick="closeLb()">×</button>
+  <button class="lbp" onclick="lbNav(-1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
+  <img id="lbImg" src="" alt="">
+  <button class="lbn" onclick="lbNav(1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+</div>
+
+<!-- MOBILE TAB BAR -->
+<div class="tabbar">
+  <div class="tbinner">
+    <button class="tbi on" onclick="setTab(this);goHome()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span data-i18n="tab.home">Accueil</span>
+    </button>
+    <button class="tbi" onclick="setTab(this);goHome();sTo('listings')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span data-i18n="tab.search">Chercher</span>
+    </button>
+    <button class="tbi" onclick="setTab(this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <span data-i18n="tab.favourites">Favoris</span>
+    </button>
+    <button class="tbi" onclick="setTab(this);goHome();sTo('ctsec')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12 19.79 19.79 0 0 1 1.08 3.4 2 2 0 0 1 3.05 1.2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.09 9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 21 16.92z"/></svg>
+      <span data-i18n="nav.contact">Contact</span>
+    </button>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════
+   TRANSLATIONS
+══════════════════════════════ */
+const T = {
+  fr: {
+    'nav.home':'Accueil','nav.catalogue':'Catalogue','nav.makes':'Marques','nav.contact':'Contact',
+    'hero.pill':'Plateforme N°1 au Cameroun',
+    'hero.h1':'Trouvez la voiture<br><em>idéale</em> au Cameroun',
+    'hero.sub':'Des véhicules sélectionnés et vérifiés à Yaoundé, Douala et dans toutes les régions du pays.',
+    'search.make':'Marque','search.city':'Ville','search.budget':'Budget max (XAF)',
+    'search.allMakes':'Toutes les marques','search.allCities':'Toutes les villes',
+    'search.budgetPh':'Ex: 15 000 000','search.btn':'Rechercher',
+    'stats.listings':'Annonces actives','stats.verified':'Véhicules vérifiés',
+    'stats.regions':'Régions couvertes','stats.visitors':'Visiteurs / mois',
+    'listings.lbl':'Nos véhicules','listings.title':'Catalogue AutoCam',
+    'filter.all':'Tous','filter.sedan':'Berlines','filter.suv':'SUV / 4x4',
+    'filter.luxury':'Luxe','filter.van':'Utilitaires',
+    'makes.lbl':'Marques populaires','makes.title':'Cherchez par marque',
+    'how.lbl':'Comment ça marche','how.title':'Trouver votre voiture en 3 étapes',
+    'how.sub':"Chaque annonce est ajoutée et vérifiée directement par l'équipe AutoCam.",
+    'how.s1t':'Parcourez le catalogue','how.s1p':'Filtrez par marque, ville et budget. Consultez les fiches détaillées de chaque véhicule.',
+    'how.s2t':'Consultez les détails','how.s2p':'Photos complètes, caractéristiques techniques et coordonnées du vendeur.',
+    'how.s3t':'Contactez le vendeur','how.s3p':'Appelez ou envoyez un message WhatsApp directement depuis la fiche du véhicule.',
+    'testi.lbl':'Témoignages','testi.title':'Ce que disent nos clients',
+    'testi.t1':'"J\'ai trouvé mon Land Cruiser en 2 jours grâce à AutoCam. Les photos et informations étaient exactement conformes à la réalité."',
+    'testi.t2':'"Interface claire, fiches complètes. J\'ai trouvé ma Corolla à Douala sans mauvaise surprise. Je recommande AutoCam à 100% !"',
+    'testi.t3':'"Les photos sont nombreuses et de qualité. On voit vraiment l\'état du véhicule avant même de se déplacer. Très bon service."',
+    'contact.lbl':'Nous contacter','contact.title':'Une question ? Écrivez-nous',
+    'contact.sub':'Vous souhaitez plus d\'informations sur un véhicule ? Notre équipe vous répond rapidement.',
+    'contact.name':'Votre nom','contact.namePh':'Ex: Patrice Mbala',
+    'contact.phone':'Téléphone ou Email','contact.msg':'Message',
+    'contact.msgPh':'Votre message...','contact.send':'Envoyer le message',
+    'footer.brand':'Le premier marché automobile de confiance au Cameroun. Tous les véhicules sont vérifiés par notre équipe.',
+    'footer.catalogueTitle':'Catalogue','footer.allCars':'Tous les véhicules',
+    'footer.about':'À propos','footer.legal':'Mentions légales',
+    'footer.copy':'© 2025 AutoCam · Tous droits réservés 🇨🇲',
+    'tab.home':'Accueil','tab.search':'Chercher','tab.favourites':'Favoris',
+    'detail.back':'Retour au catalogue','detail.specs':'Caractéristiques',
+    'detail.desc':'Description','detail.similar':'Véhicules similaires',
+    'detail.salePrice':'Prix de vente','detail.verified':'Vendeur vérifié AutoCam',
+    'detail.whatsapp':'Contacter sur WhatsApp','detail.call':'Appeler le vendeur',
+    'detail.msgPh':'Je suis intéressé(e) par ce véhicule...',
+    // spec labels
+    'spec.year':'Année','spec.km':'Kilométrage','spec.fuel':'Carburant',
+    'spec.trans':'Transmission','spec.engine':'Moteur','spec.power':'Puissance',
+    'spec.color':'Couleur','spec.doors':'Portes',
+    // car UI
+    'car.see':'Voir détails','car.noResult':'Aucun véhicule trouvé.',
+    'car.noSimilar':'Aucun véhicule similaire disponible.',
+    'car.verifiedSeller':'Vendeur vérifié AutoCam',
+    // makes
+    'makes.listings':'annonces',
+    // badge labels
+    'badge.verified':'✓ Vérifié','badge.new':'Nouveau','badge.promo':'Promo',
+  },
+  en: {
+    'nav.home':'Home','nav.catalogue':'Catalogue','nav.makes':'Brands','nav.contact':'Contact',
+    'hero.pill':'Cameroon\'s #1 Car Platform',
+    'hero.h1':'Find your <em>perfect</em> car in Cameroon',
+    'hero.sub':'Handpicked and verified vehicles in Yaoundé, Douala and across all regions of the country.',
+    'search.make':'Make','search.city':'City','search.budget':'Max Budget (XAF)',
+    'search.allMakes':'All makes','search.allCities':'All cities',
+    'search.budgetPh':'e.g. 15 000 000','search.btn':'Search',
+    'stats.listings':'Active listings','stats.verified':'Verified vehicles',
+    'stats.regions':'Regions covered','stats.visitors':'Visitors / month',
+    'listings.lbl':'Our vehicles','listings.title':'AutoCam Catalogue',
+    'filter.all':'All','filter.sedan':'Sedans','filter.suv':'SUV / 4x4',
+    'filter.luxury':'Luxury','filter.van':'Vans',
+    'makes.lbl':'Popular brands','makes.title':'Search by brand',
+    'how.lbl':'How it works','how.title':'Find your car in 3 steps',
+    'how.sub':'Every listing is added and verified directly by the AutoCam team.',
+    'how.s1t':'Browse the catalogue','how.s1p':'Filter by brand, city and budget. View the full profile of each vehicle.',
+    'how.s2t':'Check the details','how.s2p':'Full photos, technical specs and seller contact information.',
+    'how.s3t':'Contact the seller','how.s3p':'Call or send a WhatsApp message directly from the vehicle listing.',
+    'testi.lbl':'Testimonials','testi.title':'What our clients say',
+    'testi.t1':'"I found my Land Cruiser in 2 days thanks to AutoCam. The photos and info were exactly as described."',
+    'testi.t2':'"Clear interface, complete listings. I found my Corolla in Douala with no surprises. 100% recommend AutoCam!"',
+    'testi.t3':'"The photos are plentiful and high quality. You can really see the condition of the vehicle before you visit. Great service."',
+    'contact.lbl':'Contact us','contact.title':'A question? Write to us',
+    'contact.sub':'Want more information about a vehicle? Our team will get back to you quickly.',
+    'contact.name':'Your name','contact.namePh':'e.g. Patrick Mbala',
+    'contact.phone':'Phone or Email','contact.msg':'Message',
+    'contact.msgPh':'Your message...','contact.send':'Send message',
+    'footer.brand':'The first trusted car marketplace in Cameroon. Every vehicle is verified by our team.',
+    'footer.catalogueTitle':'Catalogue','footer.allCars':'All vehicles',
+    'footer.about':'About us','footer.legal':'Legal notice',
+    'footer.copy':'© 2025 AutoCam · All rights reserved 🇨🇲',
+    'tab.home':'Home','tab.search':'Search','tab.favourites':'Favourites',
+    'detail.back':'Back to catalogue','detail.specs':'Specifications',
+    'detail.desc':'Description','detail.similar':'Similar vehicles',
+    'detail.salePrice':'Sale price','detail.verified':'Verified AutoCam seller',
+    'detail.whatsapp':'Contact on WhatsApp','detail.call':'Call the seller',
+    'detail.msgPh':'I am interested in this vehicle...',
+    'spec.year':'Year','spec.km':'Mileage','spec.fuel':'Fuel',
+    'spec.trans':'Transmission','spec.engine':'Engine','spec.power':'Power',
+    'spec.color':'Colour','spec.doors':'Doors',
+    'car.see':'View details','car.noResult':'No vehicles found.',
+    'car.noSimilar':'No similar vehicles available.',
+    'car.verifiedSeller':'Verified AutoCam seller',
+    'makes.listings':'listings',
+    'badge.verified':'✓ Verified','badge.new':'New','badge.promo':'Deal',
+  }
+};
+
+let LANG = 'fr'; // default = French
+
+function t(key){ return T[LANG][key] || T['fr'][key] || key; }
+
+/* ── Apply translations to all data-i18n elements ── */
+function applyLang(){
+  document.documentElement.lang = LANG;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    const val = t(key);
+    if(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+      el.placeholder = val;
+    } else {
+      el.innerHTML = val;
+    }
+  });
+  // placeholders on inputs/textareas
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+    el.placeholder = t(el.getAttribute('data-i18n-ph'));
+  });
+  // search select first options
+  const sm = document.getElementById('sMake');
+  const sc = document.getElementById('sCity');
+  if(sm) sm.options[0].text = t('search.allMakes');
+  if(sc) sc.options[0].text = t('search.allCities');
+  // lang button states
+  document.getElementById('btnFR').classList.toggle('active', LANG==='fr');
+  document.getElementById('btnEN').classList.toggle('active', LANG==='en');
+  document.getElementById('drwFR').classList.toggle('active', LANG==='fr');
+  document.getElementById('drwEN').classList.toggle('active', LANG==='en');
+  // re-render dynamic content
+  renderCars(lastList);
+  renderMakes();
+  // re-render detail if open
+  if(curCar && document.getElementById('pgDetail').classList.contains('on')){
+    refreshDetailText();
+  }
+}
+
+function setLang(lang){
+  if(LANG === lang) return;
+  LANG = lang;
+  applyLang();
+}
+
+/* ══════════════════════════════
+   CAR DATA  ← edit here to add / remove cars
+══════════════════════════════ */
+const CARS = [
+  {
+    id:1, make:'Toyota', name:'Land Cruiser V8', year:2019,
+    price:'28 500 000', raw:28500000, km:'87 000', fuel:'Diesel',
+    trans_fr:'Automatique', trans_en:'Automatic',
+    color_fr:'Blanc Nacré', color_en:'Pearl White',
+    engine:'4.5L V8 Turbo Diesel', power:'272 ch / 272 hp',
+    doors_fr:'5 portes', doors_en:'5 doors',
+    cond_fr:'Occasion — Très bon état', cond_en:'Used — Very good condition',
+    city:'Yaoundé', badge:'verified', cat:'suv',
+    seller:'Michel Ateba', phone:'+237677123456',
+    desc_fr:'Magnifique Toyota Land Cruiser V8 entretenu régulièrement chez le concessionnaire officiel. Climatisation, sièges cuir, caméra de recul, radar de stationnement. Papiers complets et à jour. Visites possibles 7j/7 à Yaoundé.',
+    desc_en:'Stunning Toyota Land Cruiser V8 regularly serviced at the official dealership. Air conditioning, leather seats, reverse camera, parking sensors. Full paperwork up to date. Viewings available 7 days a week in Yaoundé.',
+    imgs:[
+      'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=900&q=80&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1615818499660-cafee4e5a8c3?w=600&q=75&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=75&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1606016159991-dfe4f2746ad5?w=600&q=75&auto=format&fit=crop',
+    ]
+  },
+  {
+    id:2, make:'Mercedes-Benz', name:'Classe C 220d AMG', year:2020,
+    price:'18 900 000', raw:18900000, km:'52 000', fuel:'Diesel',
+    trans_fr:'Automatique', trans_en:'Automatic',
+    color_fr:'Gris Sélénite', color_en:'Selenite Grey',
+    engine:'2.0L 4cyl Diesel', power:'200 ch / 200 hp',
+    doors_fr:'4 portes', doors_en:'4 doors',
+    cond_fr:'Occasion — Excellent état', cond_en:'Used — Excellent condition',
+    city:'Douala', badge:'new', cat:'luxe',
+    seller:'Francine Nkomo', phone:'+237699654321',
+    desc_fr:'Mercedes Classe C 220d AMG Line importée récemment. Intérieur cuir noir, écran MBUX, toit panoramique, LED. Kilométrage certifié. Dossier technique disponible. Livraison possible à Yaoundé.',
+    desc_en:'Recently imported Mercedes C 220d AMG Line. Black leather interior, MBUX screen, panoramic roof, LED lights. Certified mileage. Technical file available. Delivery to Yaoundé possible.',
+    imgs:[
+      'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=900&q=80&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?w=600&q=75&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1502877338535-766e1452684a?w=600&q=75&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1493238792000-8113da705763?w=600&q=75&auto=format&fit=crop',
+    ]
+  },
+  {
+    id:3, make:'Toyota', name:'Corolla 1.6', year:2018,
+    price:'9 200 000', raw:9200000, km:'110 000', fuel:'Essence / Petrol',
+    trans_fr:'Manuelle', trans_en:'Manual',
+    color_fr:'Bleu Foncé', color_en:'Dark Blue',
+    engine:'1.6L 4cyl', power:'132 ch / 132 hp',
+    doors_fr:'4 portes', doors_en:'4 doors',
+    cond_fr:'Occasion — Bon état', cond_en:'Used — Good condition',
+    city:'Bafoussam', badge:'promo', cat:'berline',
+    seller:'Paul Kamga', phone:'+237655789012',
+    desc_fr:'Toyota Corolla fiable et économique. Révision complète effectuée. Climatisation fonctionnelle, autoradio Bluetooth. Idéale pour la ville et la route.',
+    desc_en:'Reliable and fuel-efficient Toyota Corolla. Full service completed. Working air conditioning, Bluetooth radio. Ideal for city and highway driving.',
+    imgs:[
+      'https://images.unsplash.com/photo-1590362891991-f776e747a588?w=900&q=80&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=600&q=75&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600&q=75&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600&q=75&auto=format&fit=crop',
+    ]
+  },
+  {
+    id:4, make:'Mitsubishi', name:'Pajero Sport', year:2021,
+    price:'22 000 000', raw:22000000, km:'38 000', fuel:'Diesel',
+    trans_fr:'Automatique', trans_en:'Automatic',
+    color_fr:'Noir Métallisé', color_en:'Metallic Black',
+    engine:'2.4L MIVEC Diesel', power:'181 ch / 181 hp',
+    doors_fr:'5 portes', doors_en:'5 doors',
+    cond_fr:'Occasion — Comme neuf', cond_en:'Used — Like new',
+    city:'Douala', badge:'verified', cat:'suv',
+    seller:'Bernard Essomba', phone:'+237691345678',
+    desc_fr:'Mitsubishi Pajero Sport quasi neuf, jamais accidenté. 4WD Super Select, 7 places, caméra 360°, recharge sans fil. Garantie transférable disponible.',
+    desc_en:'Almost new Mitsubishi Pajero Sport, never been in an accident. Super Select 4WD, 7 seats, 360° camera, wireless charging. Transferable warranty available.',
+    imgs:[
+      'https://images.unsplash.com/photo-1546614042-7df3c24c9e5d?w=900&q=80&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=600&q=75&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1568844293986-8d0400bd4745?w=600&q=75&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=75&auto=format&fit=crop',
+    ]
+  },
+  {
+    id:5, make:'Honda', name:'Accord 2.4', year:2017,
+    price:'7 500 000', raw:7500000, km:'130 000', fuel:'Essence / Petrol',
+    trans_fr:'Automatique', trans_en:'Automatic',
+    color_fr:'Gris Anthracite', color_en:'Anthracite Grey',
+    engine:'2.4L i-VTEC', power:'188 ch / 188 hp',
+    doors_fr:'4 portes', doors_en:'4 doors',
+    cond_fr:'Occasion — Bon état', cond_en:'Used — Good condition',
+    city:'Yaoundé', badge:'', cat:'berline',
+    seller:'Sylvie Tchouté', phone:'+237671234567',
+    desc_fr:'Honda Accord 2.4 puissante et confortable. GPS, caméra de recul, sièges chauffants, USB. Visite technique valide. Prix négociable.',
+    desc_en:'Powerful and comfortable Honda Accord 2.4. GPS, reverse camera, heated seats, USB. Valid roadworthy certificate. Price negotiable.',
+    imgs:[
+      'https://images.unsplash.com/photo-1580274455191-1c62238fa333?w=900&q=80&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1441148345475-03a2e82f9719?w=600&q=75&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=600&q=75&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1502161254066-6c74afbf07aa?w=600&q=75&auto=format&fit=crop',
+    ]
+  },
+  {
+    id:6, make:'Hyundai', name:'Tucson AWD', year:2022,
+    price:'16 800 000', raw:16800000, km:'21 000', fuel:'Essence / Petrol',
+    trans_fr:'Automatique', trans_en:'Automatic',
+    color_fr:'Rouge Sunset', color_en:'Sunset Red',
+    engine:'1.6L T-GDi Turbo', power:'150 ch / 150 hp',
+    doors_fr:'5 portes', doors_en:'5 doors',
+    cond_fr:'Occasion — Comme neuf', cond_en:'Used — Like new',
+    city:'Garoua', badge:'new', cat:'suv',
+    seller:'Alain Moussa', phone:'+237666987543',
+    desc_fr:'Hyundai Tucson 2022 pratiquement neuf. Garantie constructeur encore active. Écran 10", Apple CarPlay, Android Auto, assistance au stationnement.',
+    desc_en:'Near-new 2022 Hyundai Tucson. Manufacturer warranty still active. 10" screen, Apple CarPlay, Android Auto, parking assistance.',
+    imgs:[
+      'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=900&q=80&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=600&q=75&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600&q=75&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=75&auto=format&fit=crop',
+    ]
+  },
+];
+
+const MAKES = [
+  {n:'Toyota',     c:1240, bg:'#E8F5E9', tx:'#1B4332', i:'T'},
+  {n:'Mercedes',   c:430,  bg:'#ECEFF1', tx:'#455A64', i:'M'},
+  {n:'Honda',      c:380,  bg:'#FBE9E7', tx:'#BF360C', i:'H'},
+  {n:'Mitsubishi', c:290,  bg:'#E8EAF6', tx:'#283593', i:'Mi'},
+  {n:'Hyundai',    c:265,  bg:'#EDE7F6', tx:'#4A148C', i:'Hy'},
+  {n:'Peugeot',    c:310,  bg:'#E1F5FE', tx:'#01579B', i:'P'},
+  {n:'Kia',        c:195,  bg:'#E8F5E9', tx:'#2E7D32', i:'K'},
+  {n:'Nissan',     c:220,  bg:'#FFF3E0', tx:'#E65100', i:'N'},
+];
+
+/* helpers */
+let lastList = CARS;
+let curCar = null, lbIdx = 0;
+
+function bdg(b, lg=false){
+  if(!b) return '';
+  const sz = lg ? 'padding:5px 13px;font-size:12px' : 'padding:4px 9px;font-size:11px';
+  const map = {
+    verified:{c:'bv', lk:'badge.verified'},
+    new:{c:'bn', lk:'badge.new'},
+    promo:{c:'bp', lk:'badge.promo'}
+  };
+  return `<span class="cbadge ${map[b].c}" style="${sz}">${t(map[b].lk)}</span>`;
+}
+
+const svgPin  = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
+const svgKm   = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10"/><path d="m12 12 4-4"/></svg>`;
+const svgFuel = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h12V3z"/><path d="M18 5h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-1"/></svg>`;
+const svgGear = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3"/></svg>`;
+
+/* render car grid */
+function renderCars(list){
+  lastList = list;
+  const g = document.getElementById('carsGrid');
+  if(!g) return;
+  if(!list.length){ g.innerHTML=`<p style="grid-column:1/-1;text-align:center;padding:2.5rem;color:var(--gray)">${t('car.noResult')}</p>`; return; }
+  g.innerHTML = list.map((c,i)=>`
+    <div class="ccard" onclick="openDetail(${c.id})" style="animation:up ${.06+i*.06}s ease both">
+      <div class="cimg">
+        <img src="${c.imgs[0]}" alt="${c.name}" loading="lazy" onerror="this.style.display='none'">
+        ${bdg(c.badge)}
+      </div>
+      <div class="cbody">
+        <p class="cmake">${c.make} · ${c.year}</p>
+        <h3 class="cname">${c.name}</h3>
+        <p class="cprice">${c.price} XAF</p>
+        <div class="cspecs">
+          <span class="cspec">${svgKm} ${c.km} km</span>
+          <span class="cspec">${svgFuel} ${c.fuel.split('/')[LANG==='en'?1:0].trim()}</span>
+          <span class="cspec">${svgGear} ${c['trans_'+LANG]}</span>
+        </div>
+      </div>
+      <div class="cfoot">
+        <span class="ccity">${svgPin} ${c.city}</span>
+        <button class="btn-see">${t('car.see')} <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+    </div>`).join('');
+}
+
+/* render makes */
+function renderMakes(){
+  const g = document.getElementById('makesGrid');
+  if(!g) return;
+  g.innerHTML = MAKES.map(m=>`
+    <div class="mkcard">
+      <div class="mklogo" style="background:${m.bg};color:${m.tx}">${m.i}</div>
+      <p class="mkname">${m.n}</p>
+      <p class="mkcnt">${m.c.toLocaleString()} ${t('makes.listings')}</p>
+    </div>`).join('');
+}
+
+/* filter */
+function filterCars(el, cat){
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  renderCars(cat==='all' ? CARS : CARS.filter(c=>c.cat===cat));
+}
+
+/* search */
+function doSearch(){
+  const make = document.getElementById('sMake').value.toLowerCase();
+  const city = document.getElementById('sCity').value.toLowerCase();
+  const bStr = (document.getElementById('sBudget').value||'').replace(/\D/g,'');
+  const budget = bStr ? parseInt(bStr) : Infinity;
+  const res = CARS.filter(c=>{
+    if(make && !c.make.toLowerCase().includes(make)) return false;
+    if(city && !c.city.toLowerCase().includes(city)) return false;
+    if(c.raw > budget) return false;
+    return true;
+  });
+  goHome();
+  setTimeout(()=>{ sTo('listings'); renderCars(res); }, 120);
+}
+
+/* spec row helper */
+const sico = path => `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--glt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`;
+function spRow(icon, key, val){ return `<div class="sprow"><span class="spkey">${icon} ${t(key)}</span><span class="spval">${val}</span></div>`; }
+
+/* open detail */
+function openDetail(id){
+  const c = CARS.find(x=>x.id===id);
+  if(!c) return;
+  curCar = c;
+  buildDetail(c);
+  showPg('pgDetail');
+  document.getElementById('nav').classList.add('lit');
+}
+
+function buildDetail(c){
+  document.getElementById('crumbName').textContent = `${c.make} ${c.name}`;
+  // gallery
+  const thumbs = c.imgs.slice(1,3);
+  const extra = c.imgs.length - 3;
+  document.getElementById('gallery').innerHTML =
+    `<div class="gmain" onclick="openLb(0)"><img src="${c.imgs[0]}" alt="${c.name}" loading="lazy"></div>` +
+    thumbs.map((img,i)=>`
+      <div class="gthumb" onclick="openLb(${i+1})">
+        <img src="${img}" alt="" loading="lazy">
+        ${i===1&&extra>0?`<div class="gmore">+${extra}</div>`:''}
+      </div>`).join('');
+  refreshDetailText();
+}
+
+function refreshDetailText(){
+  const c = curCar; if(!c) return;
+  document.getElementById('dMake').textContent = `${c.make} · ${c.year}`;
+  document.getElementById('dName').textContent = c.name;
+  document.getElementById('dPrice').textContent = `${c.price} XAF`;
+  document.getElementById('dBadges').innerHTML =
+    bdg(c.badge, true) +
+    `<span class="dbadge" style="background:var(--gpale);color:var(--green)">${svgPin} ${c.city}</span>` +
+    `<span class="dbadge" style="background:#fff8e8;color:var(--ydk)">🔑 ${c['cond_'+LANG]}</span>`;
+  document.getElementById('spGrid').innerHTML =
+    spRow(sico('<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>'), 'spec.year', c.year) +
+    spRow(sico('<path d="M12 2a10 10 0 1 0 10 10"/><path d="m12 12 4-4"/>'), 'spec.km', c.km + ' km') +
+    spRow(sico('<path d="M3 3v18h12V3z"/>'), 'spec.fuel', c.fuel.split('/')[LANG==='en'?1:0].trim()) +
+    spRow(sico('<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3"/>'), 'spec.trans', c['trans_'+LANG]) +
+    spRow(sico('<rect x="2" y="7" width="20" height="14" rx="2"/>'), 'spec.engine', c.engine) +
+    spRow(sico('<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>'), 'spec.power', c.power) +
+    spRow(sico('<circle cx="12" cy="12" r="5"/>'), 'spec.color', c['color_'+LANG]) +
+    spRow(sico('<rect x="3" y="3" width="18" height="18" rx="2"/>'), 'spec.doors', c['doors_'+LANG]);
+  document.getElementById('dDesc').textContent = c['desc_'+LANG];
+  document.getElementById('ctPrice').textContent = `${c.price} XAF`;
+  document.getElementById('selName').textContent = c.seller;
+  document.getElementById('selAvt').textContent = c.seller.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  // update static text in detail via data-i18n (already handled by applyLang but detail may not be rendered yet)
+  document.querySelectorAll('#pgDetail [data-i18n]').forEach(el=>{
+    const v = t(el.getAttribute('data-i18n'));
+    if(el.tagName==='INPUT'||el.tagName==='TEXTAREA') el.placeholder=v; else el.innerHTML=v;
+  });
+  document.querySelectorAll('#pgDetail [data-i18n-ph]').forEach(el=>{
+    el.placeholder = t(el.getAttribute('data-i18n-ph'));
+  });
+  // WA / call buttons
+  document.getElementById('waBtn').onclick = ()=>
+    window.open(`https://wa.me/${c.phone}?text=${LANG==='fr'?'Bonjour':'Hello'}, ${LANG==='fr'?'je suis intéressé(e) par votre':'I am interested in your'} ${c.make} ${c.name} ${c.year} ${LANG==='fr'?'sur':'on'} AutoCam.`, '_blank');
+  document.getElementById('callBtn').onclick = ()=> window.location.href=`tel:${c.phone}`;
+  // similar
+  const sim = CARS.filter(x=>x.id!==c.id&&(x.cat===c.cat||x.make===c.make)).slice(0,3);
+  document.getElementById('simGrid').innerHTML = sim.length ? sim.map(s=>`
+    <div class="ccard" onclick="openDetail(${s.id})">
+      <div class="cimg" style="height:150px">
+        <img src="${s.imgs[0]}" alt="${s.name}" loading="lazy" style="width:100%;height:100%" onerror="this.style.display='none'">
+        ${bdg(s.badge)}
+      </div>
+      <div class="cbody" style="padding:11px 14px 10px">
+        <p class="cmake">${s.make} · ${s.year}</p>
+        <h3 class="cname" style="font-size:17px">${s.name}</h3>
+        <p class="cprice" style="font-size:14px">${s.price} XAF</p>
+      </div>
+    </div>`).join('') :
+    `<p style="color:var(--gray);font-size:14px;grid-column:1/-1">${t('car.noSimilar')}</p>`;
+}
+
+/* lightbox */
+function openLb(i){ lbIdx=i; document.getElementById('lbImg').src=curCar.imgs[i]; document.getElementById('lb').classList.add('on'); document.body.style.overflow='hidden'; }
+function closeLb(){ document.getElementById('lb').classList.remove('on'); document.body.style.overflow=''; }
+function lbNav(d){ lbIdx=(lbIdx+d+curCar.imgs.length)%curCar.imgs.length; document.getElementById('lbImg').src=curCar.imgs[lbIdx]; }
+document.getElementById('lb').addEventListener('click',e=>{ if(e.target===document.getElementById('lb')) closeLb(); });
+
+/* pages */
+function showPg(id){ document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on')); document.getElementById(id).classList.add('on'); window.scrollTo(0,0); }
+function goHome(){
+  showPg('pgHome');
+  document.getElementById('nav').classList.toggle('lit', window.scrollY>40);
+  setTimeout(runReveal,80);
+}
+
+/* nav scroll */
+window.addEventListener('scroll',()=>{
+  const det = document.getElementById('pgDetail').classList.contains('on');
+  document.getElementById('nav').classList.toggle('lit', det||window.scrollY>40);
+},{passive:true});
+
+/* drawer */
+const drwEl = document.getElementById('drw');
+document.getElementById('burgerBtn').addEventListener('click',()=>{ drwEl.classList.add('on'); document.body.style.overflow='hidden'; });
+function closeDrw(){ drwEl.classList.remove('on'); document.body.style.overflow=''; }
+document.getElementById('drwClose').addEventListener('click', closeDrw);
+drwEl.addEventListener('click', e=>{ if(e.target===drwEl) closeDrw(); });
+
+/* tab bar */
+function setTab(b){ document.querySelectorAll('.tbi').forEach(x=>x.classList.remove('on')); b.classList.add('on'); }
+
+/* scroll helper */
+function sTo(id){ const el=document.getElementById(id); if(el) setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),120); }
+
+/* reveal */
+const revIO = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); revIO.unobserve(e.target); }});
+},{threshold:.07,rootMargin:'0px 0px -40px 0px'});
+
+function runReveal(){
+  document.querySelectorAll('#pgHome .reveal:not(.in)').forEach(el=>revIO.observe(el));
+  document.querySelectorAll('#pgHome .reveal').forEach(el=>{
+    if(el.getBoundingClientRect().top < window.innerHeight-40) el.classList.add('in');
+  });
+}
+
+/* ── INIT ── defaults to French, already set */
+renderCars(CARS);
+renderMakes();
+applyLang(); // apply FR translations on load
+runReveal();
+</script>
+</body>
+</html>
