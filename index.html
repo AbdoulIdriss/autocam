@@ -108,7 +108,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=900&q=80&auto=format&fit=crop">
+<link rel="preload" as="image" href="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1600&q=85&auto=format&fit=crop">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -169,10 +169,11 @@ nav.lit .burger span{background:var(--dark)}
 .pg{display:none}.pg.on{display:block}
 
 /* ── HERO ── */
-.hero{min-height:100svh;background:linear-gradient(150deg,#1B4332,#061410);display:flex;align-items:flex-start;justify-content:center;position:relative;overflow:hidden;padding:calc(var(--nh) + 4rem) 1.25rem 4rem;text-align:center}
-.hero-dots{position:absolute;inset:0;opacity:.05;background-image:repeating-linear-gradient(45deg,#E9C46A 0,#E9C46A 1px,transparent 0,transparent 50%);background-size:22px 22px;pointer-events:none}
-.hero-glow{position:absolute;width:650px;height:650px;background:radial-gradient(circle,rgba(233,196,106,.12),transparent 68%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
-.hero-inner{position:relative;max-width:800px;width:100%;animation:up .85s ease both}
+.hero{min-height:100svh;background-color:#061410;background-image:url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1600&q=85&auto=format&fit=crop');background-size:cover;background-position:center center;background-repeat:no-repeat;display:flex;align-items:flex-start;justify-content:center;position:relative;overflow:hidden;padding:calc(var(--nh) + 4rem) 1.25rem 4rem;text-align:center}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(160deg,rgba(6,20,10,.82) 0%,rgba(11,32,18,.75) 40%,rgba(6,14,8,.88) 100%);pointer-events:none;z-index:0}
+.hero-dots{position:absolute;inset:0;opacity:.06;background-image:repeating-linear-gradient(45deg,#E9C46A 0,#E9C46A 1px,transparent 0,transparent 50%);background-size:22px 22px;pointer-events:none;z-index:1}
+.hero-glow{position:absolute;width:650px;height:650px;background:radial-gradient(circle,rgba(233,196,106,.14),transparent 68%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:1}
+.hero-inner{position:relative;z-index:2;max-width:800px;width:100%;animation:up .85s ease both}
 .pill{display:inline-flex;align-items:center;gap:6px;background:rgba(233,196,106,.15);border:1px solid rgba(233,196,106,.3);border-radius:20px;padding:5px 15px;font-size:12px;color:var(--yel);margin-bottom:1.4rem;letter-spacing:.06em}
 .hero h1{font-size:clamp(2.2rem,6.5vw,5rem);color:#fff;line-height:1.1;margin-bottom:.9rem;font-weight:600}
 .hero h1 em{color:var(--yel);font-style:italic}
@@ -522,6 +523,7 @@ footer{background:var(--dark);padding:52px 0 24px}
 <div class="pg on" id="pgHome">
 
   <section class="hero">
+    <div class="hero-overlay"></div>
     <div class="hero-dots"></div><div class="hero-glow"></div>
     <div class="hero-inner">
       <div class="pill">
